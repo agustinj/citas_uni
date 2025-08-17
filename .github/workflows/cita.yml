@@ -3,8 +3,7 @@ name: Automatización Citas
 on:
   schedule:
     # Cron: lunes a jueves, cada 15 min de 12:00 a 14:15
-    - cron: '0,15,30,45 12-13 * * 1-4'
-    - cron: '0,15 14 * * 1-4'
+    - cron: '0 10 * * 1-4' # 12:00 Madrid
   workflow_dispatch: # Permite lanzarlo a mano desde la UI de GitHub
 
 jobs:

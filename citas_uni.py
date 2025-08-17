@@ -142,26 +142,29 @@ def check_cita():
 # ========================
 while True:
     ahora = datetime.datetime.now()
-    # Domingos (6) a jueves (3), de 12 a 15
-    
-    if ahora.weekday() in [6, 0, 1, 2, 3] and 12 <= ahora.hour < 15:
+    # Día de la semana: lunes (0) a jueves (3)
+    # Franja horaria: 12:00 a 14:15
+    hora_inicio = datetime.time(12, 0)
+    hora_fin = datetime.time(14, 15)
+
+    if ahora.weekday() in [0, 1, 2, 3] and hora_inicio <= ahora.time() < hora_fin:
         try:
             if check_cita():
                 # Paso 7: Notificación y cierre
                 enviar_notificacion()
-                log(f"✅ Cita reservada correctamente y mail enviado al cliente. Proceso finalizado a las {datetime.datetime.now().strftime('%H:%M:%S')}")
+                log(f"✅ Cita reservada correctamente y mail enviado al cliente. Proceso finalizado a las {datetime.datetime.now().strftime('%H:%M:%S')}", flush=True)
                 
                 # Pausa para que puedas ver Chromium manualmente
-                input("💡 Presioná Enter cuando quieras cerrar el script y terminar la ejecución...")
+                #input("💡 Presioná Enter cuando quieras cerrar el script y terminar la ejecución...")
 
                 import sys
                 sys.exit(0)  # Salir de todo el script
 
         except Exception as e:
-            log(f"⚠ Error durante el proceso de solicity de cita: {e}")
+            log(f"⚠ Error durante el proceso de solicitud de cita: {e}")
 
         time.sleep(5)  # Reintento rápido
 
     else:
-        log("⏸ Fuera de horario configurado (Dom-Jue, 12-15h)")
-        time.sleep(300)  # Espera 5 minutos
+        log("⏸ Hora límite alcanzada o fuera de horario (Lun-Jue, 12:00-14:15). Terminando script.")
+        break  # Sale del while
