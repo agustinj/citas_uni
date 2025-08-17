@@ -57,7 +57,7 @@ def enviar_notificacion():
 
 def check_cita():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         page.goto("https://citaprevia.ciencia.gob.es/qmaticwebbooking/#/")
         page.wait_for_timeout(1500)
