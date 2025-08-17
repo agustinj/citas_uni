@@ -31,7 +31,7 @@ os.makedirs("screenshots", exist_ok=True)
 
 def log(msg):
     ts = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-    print(f"[{ts}] {msg}")
+    print(f"[{ts}] {msg}", flush=True)
 
 
 def enviar_notificacion():
