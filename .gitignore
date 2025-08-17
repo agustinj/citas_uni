@@ -1,0 +1,17 @@
+# Virtualenv
+venv/
+
+# Caché de Python
+__pycache__/
+*.pyc
+
+# Screenshots
+screenshots/
+
+# Variables de entorno
+.env
+
+# Archivos de configuración de IDEs
+.DS_Store
+
+
