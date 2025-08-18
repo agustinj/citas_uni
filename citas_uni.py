@@ -165,7 +165,7 @@ def check_cita():
 # ========================
 while True:
     ahora = datetime.datetime.now()
-    hora_inicio = datetime.time(12, 0)
+    hora_inicio = datetime.time(10, 0)
     hora_fin = datetime.time(14, 15)
 
     if ahora.weekday() in [0, 1, 2, 3] and hora_inicio <= ahora.time() < hora_fin:
