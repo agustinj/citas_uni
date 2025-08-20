@@ -17,16 +17,16 @@ import sys
 load_dotenv()  # Cargar variables del .env
 
 # Datos de la cita
-NOMBRE = "Gonzalo"
-APELLIDO = "Ramirez Tucci"
-NIE = "5555794V"
-EMAIL = "gonzalo.ramirez.887@gmail.com"
-TELEFONO = "643567688"
+NOMBRE = "n"
+APELLIDO = "a"
+NIE = "id"
+EMAIL = "gm@gmail.com"
+TELEFONO = "123456789"
 
 # Datos de notificación
 EMAIL_ORIGEN = "agustin.jauregui2@gmail.com"
 EMAIL_DESTINO = EMAIL  # Cliente
-EMAIL_ME = "gonzalo.ramirez.887@gmail.com"  # Tu email
+EMAIL_ME = EMAIL_ORIGEN  # Tu email
 EMAIL_PASS = os.getenv("GMAIL_PASS")
 
 # Carpeta para screenshots
