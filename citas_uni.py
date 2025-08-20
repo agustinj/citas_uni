@@ -2,6 +2,7 @@ from playwright.sync_api import sync_playwright, TimeoutError
 from dotenv import load_dotenv
 import time
 import datetime
+from zoneinfo import ZoneInfo
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -32,11 +33,10 @@ EMAIL_PASS = os.getenv("GMAIL_PASS")
 # Carpeta para screenshots
 os.makedirs("screenshots", exist_ok=True)
 
-
 def log(msg):
-    ts = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    tz = ZoneInfo("Europe/Madrid")
+    ts = datetime.now(tz).strftime("%d-%m-%Y %H:%M:%S")
     print(f"[{ts}] {msg}", flush=True)
-
 
 def enviar_notificacion(screenshot_path=None):
     if not EMAIL_PASS:
@@ -49,7 +49,26 @@ def enviar_notificacion(screenshot_path=None):
     mensaje["Subject"] = "✅ Notificación: Cita reservada"
 
     # Cuerpo del mail
-    cuerpo = f"¡Se ha reservado una cita para {NOMBRE} {APELLIDO}!"
+    cuerpo = f"""
+Estimado/a {NOMBRE},
+
+¡Enhorabuena!
+Nos complace informarle que se ha reservado una cita con éxito. 
+
+📌 **Detalles importantes:**
+- Nombre: {NOMBRE} {APELLIDO}
+- Hora de la cita: {horario_seleccionado}
+- Captura de pantalla adjunta: contiene el Número de cita asignado, la Fecha de la cita y detalle de datos personales.
+
+⚠️ *Aviso importante*:  
+Este correo electrónico es una notificación automática y no constituye garantía absoluta de que la cita esté registrada. El Ministerio debería enviar otro email oficial con una invitación de calendario para la llamada.  
+Le recomendamos verificar directamente en la página oficial del Ministerio, usando la opción "Encuentra Cita" e ingresando su NIE/DNI y el número de cita que aparece en la captura adjunta.
+
+Saludos cordiales,  
+Equipo de gestión de citas
+"""
+
+    
     mensaje.attach(MIMEText(cuerpo, "plain"))
 
     # Adjuntar screenshot si existe
@@ -158,7 +177,7 @@ def check_cita():
         page.screenshot(path=screenshot_path)
         log(f"📸 Screenshot de la cita confirmada: {screenshot_path}")
 
-        return True, screenshot_path
+        return True, screenshot_path, horario_seleccionado
 
 # ========================
 # Bucle principal
@@ -170,9 +189,9 @@ while True:
 
     if ahora.weekday() in [0, 1, 2, 3] and hora_inicio <= ahora.time() < hora_fin:
         try:
-            ok, screenshot_path = check_cita()
+            ok, screenshot_path, horario_seleccionado = check_cita()
             if ok:
-                enviar_notificacion(screenshot_path)
+                enviar_notificacion(screenshot_path, horario_seleccionado)
                 log(f"✅ Cita reservada correctamente. Proceso finalizado a las {datetime.datetime.now().strftime('%H:%M:%S')}")
                 sys.exit(0)
         except Exception as e:
